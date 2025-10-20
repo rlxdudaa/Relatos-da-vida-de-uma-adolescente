@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Relatos da Vida de uma Adolescente</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #FBF8F2; /* off-white / beige */
+      --paper: rgba(255,255,255,0.85);
+      --accent: #CBA85A; /* dourado */
+      --muted: #6b6359; /* texto suave */
+      --max-width: 900px;
+      --radius: 14px;
+    }
+
+    /* Subtle paper texture via SVG data URI */
+    body{
+      margin:0;
+      font-family: 'Merriweather', serif;
+      background-color: var(--bg);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      color:var(--muted);
+      line-height:1.65;
+      scroll-behavior:smooth;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='f'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23f)' opacity='0.02'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+
+    /* Layout */
+    .container{max-width:var(--max-width);margin:0 auto;padding:40px 20px;}
+
+    header.site-header{
+      position:sticky;top:12px;z-index:40;background:transparent;padding:8px 0;display:flex;align-items:center;justify-content:space-between;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.06));
+    }
+
+    .brand{display:flex;flex-direction:column;gap:4px}
+    .title{font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:1px;color:var(--muted);font-size:18px}
+    .subtitle{font-family:'Merriweather',serif;color:var(--accent);font-weight:700;letter-spacing:2px}
+
+    nav.toc{display:flex;gap:12px;align-items:center}
+    nav.toc a{font-family:'Montserrat',sans-serif;text-decoration:none;color:var(--muted);padding:8px 12px;border-radius:10px}
+    nav.toc a:hover, nav.toc a.active{background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.4));box-shadow:0 2px 6px rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.03)}
+
+    /* Hero / cover */
+    .cover{
+      margin-top:18px;padding:40px;border-radius:var(--radius);background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.82));box-shadow:0 6px 20px rgba(0,0,0,0.04);
+      display:flex;gap:28px;align-items:center
+    }
+
+    .cover .left{flex:1}
+    .cover h1{margin:0;font-size:34px;color:var(--muted);letter-spacing:1px}
+    .cover .meta{margin-top:12px;color:var(--muted);font-size:14px}
+    .cover .author{margin-top:14px;font-family:'Montserrat',sans-serif;color:var(--accent);font-weight:600}
+
+    .cover .cover-visual{width:180px;height:220px;border-radius:10px;background:linear-gradient(180deg,rgba(203,168,90,0.18),rgba(203,168,90,0.06));display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;color:var(--accent);box-shadow:inset 0 1px 0 rgba(255,255,255,0.6)}
+
+    /* Card style sections */
+    section.card{margin-top:26px;padding:28px;border-radius:var(--radius);background:var(--paper);box-shadow:0 8px 30px rgba(0,0,0,0.03);}
+    section.card h2{margin:0 0 12px 0;font-family:'Montserrat',sans-serif;color:var(--muted)}
+    .lead{color:var(--muted);font-size:16px}
+
+    /* Sumário */
+    .sumario-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .sumario-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:10px}
+    .sumario-item a{font-family:'Montserrat',sans-serif;text-decoration:none;color:var(--muted)}
+    .page-num{color:rgba(0,0,0,0.25);font-family:'Montserrat',sans-serif}
+
+    /* Chapter style */
+    article.chapter{margin-top:30px;padding:26px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.5));}
+    article.chapter h3{margin-top:0;font-family:'Montserrat',sans-serif;color:var(--accent)}
+    article.chapter .content{max-width:78ch;margin-top:12px;font-size:18px;color:var(--muted)}
+
+    blockquote{margin:18px 0;padding:16px 20px;border-left:4px solid var(--accent);background:rgba(203,168,90,0.04);font-style:italic;color:var(--muted)}
+
+    /* small utilities */
+    footer.site-footer{text-align:center;margin:34px 0;color:rgba(0,0,0,0.45);font-size:14px}
+
+    /* Fade-in on scroll */
+    .reveal{opacity:0;transform:translateY(12px);transition:all 700ms cubic-bezier(.2,.9,.3,1)}
+    .reveal.visible{opacity:1;transform:none}
+
+    /* Back to top */
+    .top-btn{position:fixed;right:18px;bottom:20px;background:var(--accent);color:white;padding:10px 12px;border-radius:999px;font-family:'Montserrat',sans-serif;box-shadow:0 8px 20px rgba(203,168,90,0.18);text-decoration:none}
+
+    @media(min-width:900px){
+      .cover{padding:48px}
+      .cover h1{font-size:44px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="site-header">
+      <div class="brand">
+        <div class="title">RELATOS DA VIDA DE UMA ADOLESCENTE</div>
+        <div class="subtitle">Autora: Maria Eduarda Rodrigues Marcelino</div>
+      </div>
+
+      <nav class="toc" aria-label="Sumário">
+        <a href="#sumario">Sumário</a>
+
+      </nav>
+    </header>
+
+    <!-- Cover / Intro -->
+    <section class="cover card reveal">
+      <div class="left">
+        <h1>Relatos da Vida de uma Adolescente</h1>
+        <div class="meta">Uma coletânea de vivências, emoções e um toque de romance, para emocionar e fazer refletir.</div>
+        <div class="author">Autora: Maria Eduarda Rodrigues Marcelino</div>
+      </div>
+      <div class="cover-visual" style="text-align:center; margin: 40px 0;">
+  <img src="capa.png" alt="Capa do livro Relatos da Vida de uma Adolescente"
+       style="width: 100%; max-width: 800px; height: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+</div>
+    </section>
+
+    <!-- Agradecimentos -->
+    <section id="agradecimentos" class="card reveal">
+      <h2>AGRADECIMENTOS</h2>
+      <div class="lead">
+        <p>Querido(a) leitor(a),</p>
+
+        <p>Gostaria de dedicar este momento para expressar minha profunda gratidão. Agradeço por abrir as páginas do meu livro "Relatos da Vida de uma Adolescente" e embarcar nessa jornada comigo. Suas palavras de apoio e encorajamento significam o mundo para mim.</p>
+
+        <p>Escrever este livro foi uma experiência transformadora, e é com imensa felicidade que vejo que minhas palavras encontraram um lugar especial em seu coração. Cada linha, cada capítulo, foi escrito com amor e dedicação, com o objetivo de tocar vidas e transmitir uma mensagem de esperança, superação e autenticidade.</p>
+
+        <p>Agradeço por compartilhar essa jornada comigo, por se conectar com as emoções e experiências dos protagonistas adolescentes. Espero que você tenha encontrado conforto, inspiração e identificação nas páginas deste livro.</p>
+
+        <p>Lembre-se sempre que você é uma pessoa única e especial, capaz de enfrentar qualquer desafio que a vida possa trazer. Nunca deixe de sonhar, perseguir suas paixões e acreditar em si mesma.</p>
+
+        <p>Mais uma vez, meu sincero obrigada por fazer parte desta história. Que nossos caminhos se cruzem novamente em futuras aventuras literárias.</p>
+
+        <p>Com gratidão,</p>
+        <p><strong>(Duda)</strong></p>
+      </div>
+    </section>
+
+    <!-- Sinopse -->
+    <section id="sinopse" class="card reveal">
+      <h2>SINOPSE</h2>
+      <p class="lead">“Relatos da Vida de uma Adolescente” é mais do que um livro. É um desabafo, um espelho das dores e amores que moldam quem somos. Inspirado em acontecimentos reais, ele revela histórias que misturam realidade e ficção, dando voz a temas que muitas vezes são silenciados. 
+ Entre amizades, perdas, descobertas e reencontros, a narradora compartilha o que é viver, sentir e aprender sendo jovem em um mundo que nem sempre é gentil. Uma leitura que emociona, acolhe e faz pensar. </p>
+    </section>
+
+        <!-- leitor -->
+    <section id="sinopse" class="card reveal">
+        <blockquote>
+      <h2>!!Por favor, acomode-se para ler!!</h2>
+      <p class="lead">Encontre um lugar confortável, pegue sua bebida preferida e mergulhe na história...</p>
+      </blockquote>
+    </section>
+
+    <!-- Sumário -->
+    <section id="sumario" class="card reveal">
+      <h2>Sumário</h2>
+      <div class="sumario-list">
+        <div class="sumario-item"><a href="#cap1">Capítulo 1: Eu, Julia</a><span class="page-num"></span></div>
+        <div class="sumario-item"><a href="#cap2">Capítulo 2: Verônica</a><span class="page-num"></span></div>
+        <div class="sumario-item"><a href="#cap3">Capítulo 3: Elizabeth</a><span class="page-num"></span></div>
+        <div class="sumario-item"><a href="#cap4">Capítulo 4: Peter</a><span class="page-num"></span></div>
+      </div>
+    </section>
+
+<!-- Chapters -->
+<section id="chapters">
+
+  <!-- Capítulo 1 -->
+  <article id="cap1" class="chapter reveal">
+    <h3>Capítulo 1 — Eu, Julia</h3>
+
+    <p>&emsp;Olá, meu nome é Julia e vou relatar um pouco sobre a minha vida.</p>
+    <p>&emsp;O dia começou como todos os outros. Acordei, escovei meus dentes e limpei o rosto, quando fui tomar café, meus pais estavam ali sentados na mesa, mexendo no celular, ocupados por conta do trabalho. O que normalmente é falado nas mesas das outras famílias no café da manhã é: “bom dia! Dormiu bem? O que fará hoje?“, mas meus pais têm um diálogo comigo totalmente diferente, mais ou menos assim:</p>
+    <p>&emsp;— Tirou 10 nas provas? Como vai ser uma advogada se continuar desse jeito? E sua postura?</p>
+    <p>&emsp;O que não me impressiona, pois eles sempre fizeram isso.</p>
+    <p>&emsp;Se eu quero ser uma advogada? Claro que não. Meus pais são patéticos, não me deixam escolher o que eu quero para a minha vida, sempre estão colocando pressão em mim, tendo esperanças de que vou ser uma filha perfeita que só tira nota 10, que quando eu crescer eu seja uma mulher bem-sucedida, casada com um homem rico.</p>
+    <p>&emsp;Muitas pessoas trabalham com o que gostam e se dão super bem. Eu gosto é de escrever, acho que tenho um dom para isso, até comentei com meus pais se a ideia de virar escritora era boa, mas o que disseram foram só:</p>
+    <p>&emsp;— Esqueça essa ideia, você não tem talento.</p>
+    <p>&emsp;E minhas esperanças de impressionar meus pais com meus textos foram de ralo abaixo. O que eu poderia fazer? Só era uma garota de 15 anos no ensino médio, moro na casa dos meus pais e não tenho do que reclamar, tenho só a obedecer e agradecer, mas a única coisa que realmente eu queria, era que eles me escutassem e me apoiassem com meu sonho e do que eu realmente quero para a minha vida.</p>
+    <p>&emsp;Meus pais sempre foram rigorosos, desde quando eu era pequena, queriam que eu fosse perfeita, que eu não cometesse erros, que nota abaixo de oito já era uma vergonha, nota nove e nove e meio deveria me esforçar mais e 10 era mais que minha obrigação. Estudar muito para que eu ganhe uma vaga em Harvard. Eu que sou filha única tenho que lidar sozinha com esses caprichos.</p>
+    <p>&emsp;Pessoas que passam por mim na rua me conhece por conta do meu pai, ele é o melhor médico da região e esperam o melhor de mim, esperam que eu seja mais sucedida que ele, que eu more no exterior, esse tipo de esperanças que meu pai dá aos pacientes dele:</p>
+    <p>&emsp;— Minha filha é muito inteligente, vai estudar em Harvard e virar advogada.</p>
+    <p>&emsp;Muitas pessoas estão com esperanças em mim, graças ao meu pai, se eu falhar, muitos estarão decepcionados, olha que legal, nem parece que está me colocando pressão e acabando com meu psicológico.</p>
+    <p>&emsp;Na escola a pressão psicológica era o que eu mais sofria, só podia fazer amizades com quem os pais eram bem-sucedidos e nem pensar falar com as pessoas abaixo da média, mas é como de esperar. Minhas amigas ricas eram insuportáveis e meus amigos que são mais humildes, eram as melhores pessoas desse mundo, eles sempre me apoiavam em meus sonhos, falavam para eu nunca desistir. E claro essa amizade era escondida, porque se uma das minhas amigas patricinhas me vissem eu falando com eles, é bem provável que contaria aos meus pais e eu mudaria de escola e nunca mais viria o rosto deles. Meus amigos verdadeiros sabem desse risco, já os alertei, eles entenderam e estão de acordo em manter em sigilo.</p>
+
+    <hr class="divider">
+
+    <p>&emsp;Tem um menino da outra sala que gosta de mim, o nome dele é Jack e meus pais já sabem e querem que eu namore com ele, só pelo motivo de que o pai dele é dono de uma empresa muito famosa e a mãe dele é a melhor advogada do país. O que eu tenho a dizer sobre isso? O menino é simplesmente um playboyzinho que se acha muito por ser rico, o futuro dele já é planejado nem precisa ralar, porque os pais bancam e já tem uma vaga reservada para ele em Harvard, por conta do dinheiro dos pais.</p>
+    <p>&emsp;Ele já tentou me agradar de várias formas, me levando flores, dedicando gols do futebol para mim, algo bem típico do garoto popular da escola. Eu odeio esse menino, acho ele muito forçado. Minhas amigas patricinhas sempre me falam para eu namorar ele, por causa da fama e reputação, mas eu não dou ouvidos, porque não ligo para isso.</p>
+    <p>&emsp;Jack era um garoto muito convencido, me implorou para que eu jantasse na casa dele, por educação eu fui. Minha mãe ama a mãe dele, sempre fala para eu pedir conselhos para eu ser uma advogada tão espetacular quanto ela. Enfim, Jack me buscou na minha casa, ficou me admirando e me elogiando pelo caminho inteiro. Chegando na casa dele, Jack me leva em direção à mesa de jantar e ele disse que os pais estavam fora. Fiquei pouco apavorada quando soube disso, não sabia o que Jack era capaz de fazer, estava desconfiando que ele tinha colocado algo na comida para que acontecesse algo.</p>
+    <p>&emsp;No final do jantar estávamos conversando do que iríamos fazer depois da escola, falei que eu amava ler e que por mim, seria escritora, mas pelos meus pais seria uma advogada. Ele falou que amava jogar futebol, mas por conta dos pais, ele seria o herdeiro da empresa do pai. Até que tínhamos algo em comum, nossos pais não queriam que fizéssemos nossos empregos dos sonhos. No final percebi que Jack era um cara legal.</p>
+    <p>&emsp;Depois de um tempo os pais dele chegaram e se desculparam pela demora, me cumprimentaram e perguntaram como meus pais estavam em casa, respondi que eles estavam bem. Com minha observação vi o pai dele entregando uma caixinha pequena na mão de Jack. Nos reunimos na mesa e estavam conversando sobre o nosso futuro, que se nós ficarmos juntos iríamos ser uma família muito rica, idolatrada por muitos.</p>
+    <p>&emsp;Logo depois Jack me mostrou a caixinha, dentro dela tinha um anel e me falou que nós dois juntos teríamos uma família perfeita. Eu indignada com aquilo que estava acontecendo, me retirei da casa de Jack e pedi desculpas, porque eles entenderam algo de errado. Não queria ter um futuro com o Jack, muito menos uma família com ele.</p>
+    <p>&emsp;Quando chego em casa, me deparo com meus pais ansiosos, como se estivessem esperando eu falar alguma notícia. Quando percebem que estava brava e muito chateada eles me perguntam se aceitei o pedido de namoro do Jack. Fiquei mais entristecida, por conta que meus pais já sabiam da notícia e ainda queriam um namoro forçado, sabendo que eu não gostava de Jack.</p>
+    <p>&emsp;Fui ao meu quarto, tranquei a porta e fui falar com meus amigos leais, sobre o que tinha acontecido, eles riram para descontrair, e pela onda da conversa, fui me descontraindo e esquecendo do que tinha rolado, pela noite dando altas risadas com meus amigos, a noite finalmente melhorou.</p>
+    <p>&emsp;No dia seguinte, fui para escola e me deparo com Beth e Verônica (minhas amigas patricinhas) já falando do que aconteceu sobre ontem, que meus pais já haviam contado sobre o pedido de namoro do Jack, falei que tinha acontecido nada de mais, pois elas já sabiam que eu não gostava dele.</p>
+    <p>&emsp;No corredor vi Jack passando, me olhou com uma cara triste, decepcionado por conta de ontem, mas temos que saber viver assim, nem sempre o amor é correspondido. Tem várias meninas gostando de Jack e ele nem dá atenção.</p>
+    <p>&emsp;Tudo bem, já sabem da existência do Jack, mas já se perguntaram de quem eu tinha interesse na escola? Peter, ele fazia parte do meu grupo de amigos. Amo quando nós conversamos, sinto que temos uma química inexplicável, ele é muito carinhoso, cuida de mim. Fico muito tímida quando ele me faz elogios, principalmente quando ele fala do meu sorriso, porque eu vivo escondendo-os quando começo a rir e Peter sempre fala:</p>
+    <p>&emsp;— Seu sorriso é muito bonito para ser escondido.</p>
+    <p>&emsp;As borboletas da minha barriga não param de voar, parecendo que vão sair pela minha boca. Temos muito em comum, estilo de música, gêneros de filmes preferidos, temos uma sincronia que ninguém consegue explicar o que rola entre nós. Amo quando nós ficamos sozinhos estudando, pois é nesse momento que podemos ser verdadeiros conosco, eu sei que ele sente o mesmo, consigo ver pelo olhar. Infelizmente nós dois somos muito tímidos para desabafar o que sentimos um pelo outro, mas não é algo que atrapalha o que temos.</p>
+
+    <hr class="divider">
+
+    <p>&emsp;Em pouco tempo seria meu aniversário. Estava muito ansiosa, pois meus pais haviam deixado eu convidar quem que eu quisesse, inclusive os meus verdadeiros amigos. Minha mãe era a responsável pelos preparativos, ela sempre gosta de resolver essas coisas antes da comemoração, seja qual for, até no Natal, ela é muito prevenida com essas coisas. </p>
+    <p>&emsp;Minha mãe havia me falado que minha festa de 16 seria muito melhor que a minha festa anterior, então seria uma festa inesquecível. Mais um motivo para eu estar ansiosa. </p>
+    <p>&emsp;Enquanto eu contava os dias que faltavam para o meu aniversário, eu logo pensava como eu iria conversar com meus pais, em relação de aceitar os meus amigos. Eu estava decidida, independentemente da opinião ou da ação deles, eu iria sempre amar meus amigos e nunca os deixariam, mesmo se fazerem eu nunca mais ver os meus amigos, sempre iria os encontrá-los, sei que iria. </p>
+    <p>&emsp;Os dias se passavam e Jack voltava a falar comigo, mas ele estava mudado. Disse que só queria amizade, eu aceitei essa condição. Durante esses tempos, eu e Jack nos demos muito bem, nos conhecemos mais, tivemos vários momentos incríveis, mas ainda estava com receio, de ainda pensar que ele talvez tente algo entre nós, como namorar. Aproveitando que nós tínhamos uma boa amizade, convidei-o para meu aniversário, ele havia dito que iria comparecer e que estava tão ansioso quanto eu. </p>
+    <p>&emsp;Faltava exatamente cinco dias para o meu aniversário, já não me aguentava de tanto que eu estava ansiosa. Nas minhas distrações, para não pensar tanto na festa, eu me inspirava para escrever um discurso, para que eu falasse em minha festa. Na minha família é tradição, agradecer aos convidados, contar um pouco sobre a vida e o quão estava feliz no dia. </p>
+    <p>&emsp;Olhado na janela de casa, pude me deixar levar em minhas palavras. Que tive inspiração para fazer um texto dizendo o quão a vida era tão vaga, mas infelizmente meu pai havia me flagrado, leu o que eu tinha escrito e simplesmente o rasgou, disse para que eu parasse com essa bobagem de escrever, que meu texto estava horrível. Muito obrigada pai, por acabar com minha alegria. </p>
+    <p>&emsp;Para aqueles decepcionados com essa situação, eu havia conseguido recolher os papeis rasgados, os juntei como se fosse um quebra cabeça. O texto é mais ou menos assim: </p>
+
+    <blockquote>"Quando olho para a janela, vejo meu mundo de outra maneira, pessoas seguindo suas vidas ao trabalho, alunos correndo para entrar dentro das escolas. Eu paro e penso que cada dia está passando muito rápido e me pergunto se o tempo dá um tempo para descansar, vai devagar, pois está rápido demais. O tempo não para. Não quero acordar amanhã sentindo falta de ter vivido alguma coisa, de não ter realizado algo. Não quero pensar depois, que eu poderia ter sido e não fui ou o que eu poderia ter feito e não fiz. É preciso parar, sentar e pensar se a vida é assim, decorrente. Algo que prejudicamos nossas próprias vidas. Como a canção de Kell Smith fala, ´´é que a gente quer crescer e quando cresce quer voltar do início`, pois sabíamos que a vida era mais fácil, quando não precisássemos nos preocupar com nada, quando crescemos lidamos com problemas e é de nossa conta resolvê-los". </blockquote>
+
+    <hr class="divider">
+    
+    <p>&emsp;Finalmente o dia mais esperado chegou, o meu aniversário. Era de manhã e eu já estava ansiosa para que começasse a festa, meus amigos leais estavam tão ansiosos quanto eu, mal esperavam para que conhecessem a minha casa. </p>
+    <p>&emsp;Já eram seis horas da tarde. O horário que iria começar a festa. Os convidados já estavam chegando, avistei meus amigos leais e já os levei para conhecer os meus pais. Eu pensei que seria uma cena mais tenebrosa, cheguei a pensar que meus pais iram expulsá-los da festa, mas no final deu tudo certo, pois eles são ótimos aluno e tem notas acima da média, então eu estando com eles seria ótimo para mim. </p>
+    <p>&emsp;Estava tudo perfeito até Jack chegar e me entregar um buque de flores e um colar muito chique e caro. Todos da festa pararam para olhar, ele me pediu se ele podia colocar o colar e eu o deixei. O colar era realmente lindo, eu agradeci o presente e no mesmo instante ele me chamou para dançar e eu na frente de todos, não pude recusar. Depois da valsa estava tomando um suco, Peter me avistou e veio falar comigo. Ele disse que estava mal, pois o presente que me deu era muito humilde comparado ao presente de Jack. Eu disse que não era para se preocupar, porque eu tinha amado o presente que Peter havia me dado. </p>
+    <p>&emsp;Quando fui servir os convidados, ouvi gritos de briga, quando eu vi não acreditei, era o Peter e o Jack brigando, não sei o que aconteceu, mas eu sabia que era por minha causa. Consegui parar a briga e dei um sermão nos dois e falei que se era brigar, que brigassem lá fora. A festa continuou como se nada tivesse acontecido. </p>
+
+    <hr class="divider">
+
+    <p>&emsp;No dia seguinte...</p>
+    <p>&emsp;Eu estava no quarto tentando escrever em meu caderninho onde escrevo todos os meus textos. Até que minha mãe entra no meu quarto, na hora tomo um susto e tento esconder o caderno, mas infelizmente não consegui e ela me perguntou o que era aquilo lendo minhas escritas. Respirei fundo e falei que era os meus textos e que não importava o que falassem eu ia continuar escrevendo, pois era minha paixão, pois era algo que me deixava viva, ela e meu pai podem achar que eu não tenho talento, mas não vai ser só isso que me possa parar de fazer o que eu amo. </p>
+    <p>&emsp;Minha mãe olhou nos meus olhos e disse nada, saiu do meu quarto e logo depois apareceu com meu pai. Tivemos uma conversa para lá de estranha. Meu pai havia dito que a mãe dele era escritora e que na infância, minha vó não dava atenção, pois estava muito ocupada escrevendo textos. Ele levou rancor, disse que se arrependia de ter falado aquelas coisas para mim e que eu era talentosa tanto como minha vó. Falou que se eu quisesse seguir o futuro como escritora meus pais iriam me apoiar. Quando soube disse eu fiquei muito feliz. </p>
+    <p>&emsp;Meus pais me contaram que minha vó, já falecida. Era a melhor amiga de Jackson Wilston o melhor escritor do universo. Coincidentemente é avô de Jack. Não tive tempo a perder. Já que eu já estava voltando a falar com Jack, convidei ele para sair e foi assim vários finais de semana. Até que estávamos bem íntimos e ele me contou que seu avô iria visitar a família dele nesse final de semana e Jack me convidou, pois sabia que eu amava escrever. </p>
+    <p>&emsp;Na casa de Jack, pude conhecer Jackson, tudo aquilo era extremamente maravilhoso. O avô de Jack me falou que sabia que eu amava escrever tanto quanto ele, pois Jack havia contado sobre mim. Ele me deu umas dicas para ser uma escritora tão boa quanto ele e obviamente eu o escutei com muita atenção.</p>
+    <p>&emsp;Depois disso tudo que tinha rolado, eu achava estranho Jack não ter tentado nada com nossa relação de uma amizade colorida talvez, achava estranho ele ter respeitado o meu tempo. Perguntei para ele o havia acontecido, pois a 1 mês atrás ele me pediria em namoro na primeira vez que fossemos sair. Ele falou que tinha mudado, que agora era uma pessoa compreensiva e tenta ser o melhor a cada dia. Me senti mal quando soube, pois meu consciente estava falando que eu havia usado ele, mas preferi guardar isso para mim.</p>
+    <p>&emsp;Por dentro eu sabia que eu ainda gostava de Peter, mas ao mesmo tempo queria o Jack, pois ele está sendo uma pessoa totalmente diferente e a minha cabeça estava muito confusa. Decidi não me distrair com o amor e fui me dedicando cada vez mais em minhas escritas. Mesmo eu conversando com Jack e Peter eu não poderia escolher só um, pois eu gostava dos dois.</p>
+
+  </article>
+
+  <!-- Capítulo 2 -->
+  <article id="cap2" class="chapter reveal">
+    <h3>Capítulo 2 — Verônica</h3>
+    <p>&emsp;Não é somente uma história de amor, de como são nos livros e nos filmes, que é sempre clichê e com um toque de mágica o final sempre acaba feliz. Para descobrir como vai terminar essa história, você terá que acompanhar tudo de onde começou. A história é a seguinte... </p>
+    <p>&emsp;Já contei um pouco sobre a minha história, agora é a hora de contar um pouco sobre uma das minhas amigas, a verônica.</p>
+    <p>&emsp;Nos conhecemos no jardim de infância, ela sempre foi metida, chamava atenção dos meninos pela reputação que ela tem, mas mal sabe que quase todo mundo da escola odeia ela. Acredito eu, que seja por conta da “inocência” dela, acho que ela se finge de sonsa, porque é nítido.  </p>
+    <p>&emsp;Ela é aquela garota, sabe? A “pick me girl”, as únicas pessoas que aturam ela e as ações dela sou eu e a Beth (minha outra amiga patricinha). É claro que tentamos mudar a ideologia da cabeça dela, pois todos sabemos que é tóxico, só ela que não enxerga! Isso é por conta dos pais dela, são outros egocêntricos, doentes da cabeça. Eles arranjam qualquer motivo para se manter superior as outras pessoas e pior, eles são racistas. São coisas que a grande parte da sociedade não aceita e eles nunca mudam. </p>
+
+    <hr class="divider">
+
+    <p>&emsp;Depois da minha grande história de amor sobre o Jack e o Peter, ela mudou um pouco de sua ideologia, ela viu que não importa a classe financeira de uma pessoa, para começar a ter sentimentos por ela. Até se esforçou, conseguiu namorar um amigo do Peter, porque era "bonitinho", mas a incomodava o motivo dele ser humilde, ou será que esse incomodo era por conta de seus pais? Eles não aceitam, de jeito nenhum ela fazer amizades com pessoas ´´humildes``, assim como meus pais, mas a Verônica quis se aventurar, assim como eu.</p>
+    <p>&emsp;Talvez essa "aventura" mudou um pouco a cabeça dela e de seus pais, pois nesse namoro todos viram que ela havia mudado e com certeza, para melhor, estava se concentrando nas aulas, ajudando os colegas, dando dica de moda para as meninas, até mesmo ajudou uma senhora atravessar a rua, mudou sua personalidade, estava sendo gentil. Coisas que chocou a todos, mas o que preocupava é que ela estava tratando o Jonatan de outra maneira... </p>
+    
+    <hr class="divider">
+    
+    <p>&emsp;O Jonatan é aquele cara que é amigo de todo mundo, faz parte do time de basquete. Ele não chega a ser popular como o Jack e os seus amigos, mas ele é um parceiro que qualquer um pode contar, em qualquer hora, em qualquer lugar. É um garoto muito inteligente e esforçado. Jonatan tem um futuro brilhante pela frente. </p>
+    <p>&emsp;Verônica não vê o Jonatan com o mesmo olhar que nós, ela sempre o tratou mal, rebaixando-o por conta de sua cor e não a importava dele ser de classe alta, ela iria se comportar do seu jeito doentio, isso desde o jardim de infância e o Jonatan sempre dizia quando perguntavam logo depois da Verônica rebaixar ele: </p>
+    <p>&emsp;— Está tudo bem, Deus um dia vai cobrar pela maldade que ela está fazendo, pois todos somos iguais e cabe a ela abrir seus olhos. </p>
+    <p>&emsp;Um dia, no intervalo Jonatan passou perto de verônica e ela disse:</p>
+    <p>&emsp;— Saí garoto, assim você vai infectar minha comida.</p>
+    <p>&emsp;Todo mundo estava quieto e só tinha ela rido de suas próprias palavras. Eu e a Beth estávamos olhando para ela com desgosto, pois era decepcionante. Ninguém aguentava as baboseiras que ela falava sobre o Jonatan, e eu falei: </p>
+    <p>&emsp;— Se você não mudar e só ficar rebaixando os outros, por conta da cor, eu sinto muito, mas não poderei mais ser sua amiga.</p>
+    <p>&emsp;Me retirei da mesa onde eu estava sentada junto a ela, e a Beth veio junto comigo. Ela viu que tinha perdido tudo que ela tinha e frustrada falou:</p>
+    <p>&emsp;— Sério que vocês vão para de falar comigo, porque eu estava brincando, falando desse macaco?</p>
+    <p>&emsp;onatan cansado de escutar coisas absurdas saindo da boca dela desabafou:</p>
+    <p>&emsp;— Você não se enxerga garota? Que você é nojenta? Que só você nessa escola inteira em pleno século 21, tem essa mente que não consegue ser tratada? Saiba que você nunca irá para frente se ainda pensar desse jeito, você não vê? Que somos iguais, temos os mesmos direitos, estamos no mesmo patamar na sociedade e ainda quer me rebaixar por conta da minha cor? Se quer saber mais... Eu não sou mimado que nem você, pois soube viver a vida na marra, e não preciso do dinheiro dos meus pais para entrar em Harvard que nem você. Diferente de ti, eu sempre fui esforçado e inteligente e nunca rebaixei alguém, mesmo ela sendo diferente de mim, mas como eu disse. Você nunca irá para frente se pensa desse jeito! Você é ridícula, você tem que se tratar!</p>
+    <p>&emsp;Todos que estavam ali se surpreenderam com o lacre do Jonatan e aplaudiram. Verônica com vergonha, saiu frustrada e foi direto ao banheiro.</p>
+    <p>&emsp;Mesmo ela sendo errada nessa história, fui atrás dela preocupada, pois ela já tinha um histórico de depressão e fui conferir como ela estava. Quando cheguei no banheiro estava escutando o choro dela, ela estava em uma das cabines e perguntei se ela queria conversar, no instante ela abriu a porta da cabine onde estava, me olhou com um olhar de um alguém que sabia que estava errada e começou a desabafar... </p>
+    <p>&emsp;— Amiga, eu não faço isso por mal, de verdade. Depois do que aconteceu eu me sinto muito mal, mas esse meu comportamento acho que é influência dos meus pais, na verdade... só do meu pai. Porque a minha vó, a mãe da minha mãe é negra e eu a amo do fundo do meu coração, amo os seus bolinhos e amo quando conversamos, ela que gosta de perguntar como estão os namoradinhos, mas eu só consigo aproveitar esse momento quando estou com minha mãe, pois quando meu pai está junto, ele é muito forçado, e quando chegamos em casa ele começa a falar que não gosta da sogra dele, porque ela é negra. Ele só ama minha mãe, porque ela é adotada e não tem "sangue de negro". Ele sempre falou que eram pessoas que não deveriam existir, pois são imprestáveis na sociedade, mesmo eu sabendo que isso é mentira, eu não posso responder meu pai, eu daria de tudo para contrariá-lo, ele sabe do Jonatan e meu pai falou que se eu tivesse algum vínculo com ele, mesmo sendo na amizade, ele disse que iria me deserdar e eu não queria ter esse risco, por isso me comporto assim... Eu sei que é doentio, sei que muitos me odeiam por eu ser assim e me finjo de sonsa, para aturar isso tudo. Eu quero mudar essa história, quero mudar a visão do meu pai, mas para isso, eu preciso de ajuda e preciso esclarecer as coisas para o Jonatan. </p>
+    <p>&emsp;Eu nem sabendo o que falar, abracei ela, pois um abraço vale mais que mil palavras e eu queria consolar ela e sabia que estava precisando. Eu me ofereci para ajudá-la com seu pai e todo esse desenvolvimento com o Jonatan e eu já sabia que isso não iria ser fácil. </p>
+
+    <hr class="divider">
+
+    <p>&emsp;Depois da escola, eu, Verônica e a Beth estávamos elaborando um plano, para a Verônica tentar conversar com o Jonathan e se desculpar pelo seu erro, e depois tentar convencê-lo a participar do plano que estamos criando, para mudar a cabeça do pai da Verônica. </p>
+    <p>&emsp;No dia seguinte, falei para o Jonathan ficar atrás das arquibancadas no campinho depois da escola. Ele estava perguntando do porquê, eu apressada sem saber o que responder, falei para ele ir, porque era uma surpresa. </p>
+    <p>&emsp;Quando o sinal tocou, Jonathan curioso, foi até as arquibancadas para saber o que iria acontecer. Quando ele chegou, se deparou comigo e com a Beth, ao lado de Verônica. Desapontado, ele queria ir embora. Verônica pediu para ele esperar e escutar o que ela tinha para dizer. Antes dela começar a falar, Jonatan se manifestou e disse:</p>
+    <p>&emsp;— Escutar você me humilhando mais? Para mim já deu, vou embora. </p>
+    <p>&emsp;Verônica desesperada, pediu desculpas pela forma de como ela agiu, pois era errado. Jonatan surpreso, se virou e disse:</p>
+    <p>&emsp;— Foram anos me humilhando e foi reparar hoje que isso é errado?</p>
+    <p>&emsp;Verônica pediu para o Jonatan um pouco de paciência, para que pudesse se explicar. Eu de canto escutando tudo, também pedi ao Jonatan para ser paciente, pois o que ela iria explicar seria um pouco confuso e meio amedrontador. Ele decidiu escutar o que verônica tinha para dizer. Quando ela terminou de contar toda história, Jonathan ficou surpreso e não teve reação. Verônica está chorando e suplicando pelo seu perdão, e no final das contas... Jonatan deu um abraço nela. Depois desse abraço, ela se sentiu melhor, como se tivesse tirado um peso enorme em suas costas.</p>
+    <p>&emsp;Falei que tínhamos que bolar um plano, para que mudássemos o pensamento do pai de Verônica, com isso Beth deu uma ideia, que Verônica e o Jonatan teriam que começar um namoro fake, não só para o pai da verônica, mas sim para todo mundo, até mesmo para o pessoal da escola. Seria uma verdadeira loucura, mas os dois toparam, porque é um desafio e tanto. Nos nossos planejamentos, já estávamos pensando como iria espalhar esse ´´namoro`` para a escola, não poderia ser do nada, então decidimos ir com calma, em um dia conversando no corredor da escola, no outro sentados juntos no intervalo, por fim se aproximando ainda mais, para que os outros pudessem acreditar sem suspeitar de nada. Quando começaram os rumores que eles estavam ficando mais próximos, decidimos fazer o ´´elemento surpresa``, aparecerem juntos de mãos dadas no meio do corredor, e foi aí que gerou mais boatos e as pessoas começaram a juntar as peças, dizendo:</p>
+    <p>&emsp;— por isso ela sempre implicava com ele. </p>
+    <p>&emsp;Isso fazia muito sentido para as pessoas que não sabia da verdade.</p>
+    <p>&emsp;Depois de uma semana com o plano. Os rumores aumentaram e o nosso plano estava dando certo, então decidimos ir para a parte final do plano, contar para o pai da verônica sobre o namoro dela com o Jonatan, não sabíamos como iriamos dar a notícia, mas no final entramos em um acordo. O plano seria assim: O pai dela iria saber através de um convite para um encontro de jantar no “Howal palace” (o melhor restaurante da cidade e o mais chique). Isso seria num sábado de noite, para que o Jonatan nem a Verônica saíssem no prejuízo, eu e a Beth entramos num acordo em dividir a conta, e obviamente, nós também iriamos estar no restaurante, para comermos e comemorar uma vitória de missão cumprida ou a amargura de uma missão falhada. </p>
+
+    <hr class="divider">
+
+    <p>&emsp;Estávamos numa quarta-feira, faltavam três dias para o "encontro" e a parte final do nosso plano, todos estavam bem ansiosos para o que iria acontecer, qual seria a reação do pai da Verônica? Ninguém sabia. Tudo podia dar certo, mas tudo podia dar errado. </p>
+    <p>&emsp;Enfim o dia de colocar o plano em ação chegou. Todos nós acordamos cedo, pois estávamos ansiosos. As oito da manhã, Jack me mandou mensagem perguntando se eu tinha algo para fazer hoje, eu tinha dito que iria sair com minhas amigas e o Jonatan e ele havia perguntado se tinha algum problema de ele ir conosco para o jantar. Eu sem saber confirmar a presença dele, mandei mensagem para minhas amigas perguntando se o Jack poderia ir, todas concordaram, porque quanto mais ajuda, melhor. Enfim, mandei mensagem para ele falando do que iria acontecer, até porque não iria ser um encontro comum, isso tudo fazia parte de um plano. Ele compreendeu toda história e quis colaborar.</p>
+    <p>&emsp;Quanto mais olhava para o relógio, mais as horas não se passavam. Eram duas da tarde e as meninas já começaram a se produzir, eu não demoro mais de três horas para me arrumar, acredito que eu consigo ficar produzida em torno de uma hora.</p>
+    <p>&emsp;Já eram quatro da tarde e só faltavam três horas para o "encontro". O pai da Verônica viu ela se produzindo para sair e perguntou para onde ela iria tão bonita. A partir desse momento o plano começou. Verônica bastante ansiosa e com medo da reação de seu pai, disse que iria para um jantar no restaurante mais chique da cidade. Seu pai surpreso e curioso, perguntou com quem ela iria jantar, Verônica aflita falou:</p>
+    <p>&emsp;— Com o Jonatan.</p>
+    <p>&emsp;Quando o pai dela ouviu, ele tinha mudado de expressão automaticamente, estava com uma cara de decepcionado, pois como todos já sabem ele não gosta do Jonatan. O pai furioso queria impedir a Verônica de ir para o ´´encontro``, mas quando a mãe dela chegou e percebeu o que estava acontecendo, quis intervir na briga dos dois, porém o Sr. Miller (Pai da Verônica) bateu nela, para que ela parasse de se intrometer.</p>
+    <p>&emsp;A briga não era mais entre pai e filha, era entre os pais da Verônica. Ela nunca tinha visto essa cena deles brigando. Assustada, imediatamente me ligou falando que estava com medo, medo de que ele matasse a mãe dela. Rapidamente liguei para a polícia, para que eles levassem uma viatura e vários militares à casa da Verônica, pois ninguém sabia da loucura que ele é capaz de fazer. Quando eles chegaram na casa dela, estavam em um momento muito tenebroso, havia muitas gritarias, muitos vidros quebrados. Os militares decidiram entrar e viram uma cena tenebrosa. A casa revirada e os dois muito machucados. </p>
+    <p>&emsp;Quando o pai da Verônica viu que os policiais entraram na casa, ele decidiu pegar um revólver que havia guardado, para um caso de emergência e àquela hora era um momento perfeito para ser usado. Obviamente ele não foi páreo para os homens experientes. No final o pai de Verônica foi preso por agressão doméstica, feminicídio, racismo e porte e posse de arma ilegal. Dando entre 20 e 47 anos de cadeia. Pelo visto, prisão perpétua, irá ficar na cadeia até morrer ou até ele completar 92 anos de idade.</p>
+    <p>&emsp;A história de terror acabou e para tudo melhorar decidimos ir para o shopping comemorar uma vitória, sem contar que os lanches são muito bons, é muito mais barato. A Sra. Miller também foi conosco, para se distrair após de uma cena perturbadora. Não é um conto de fadas, mas no fim tudo acabou bem “e todos viveram felizes para sempre”.  </p>
+    <p>&emsp;Eu e Jack estávamos num canto conversando, enquanto o Jonatan e a verônica estavam na mesa conversando, falando que finalmente aquele pesadelo acabou. Por fim Verônica se abriu e disse que nos momentos que eles estavam juntos fingindo um namoro, ela sentiu um sentimento a mais com ele. Jonatan quando escutou disse que sentia o mesmo, porque quando eles estavam juntos era um momento deles se conhecerem melhor e acabou tendo sentimentos por ela. Lá naquela mesa, no meio do shopping, com dois pratos com os restos que sobraram dos lanches, Jonatan pediu a mão de Verônica e ela disse sim.</p>
+    <p>&emsp;E como eu havia dito no começo desse capítulo... “Não é somente uma história de amor, de como são nos livros e nos filmes”. Tudo se resume em saber amar e ter consciência de suas ações. </p>
+
+  </article>
+
+  <!-- Capítulo 3 -->
+  <article id="cap3" class="chapter reveal">
+    <h3>Capítulo 3 — Elizabeth</h3>
+    <p>&emsp;Já contei um pouco sobre mim, sobre a Verônica. Agora vamos falar da Beth. Mas já vou avisando que não vai ser uma história romântica como o da verônica ou amorosa como a minha.</p>
+    <p>&emsp;A Beth teve uma infância difícil, mas não deixou de aproveitá-la. Porém é como dizem “era melhor nem ficar sabendo”. Digo isso porque foi algo muito doloroso ter que passar esse momento com ela, não nego que isso me fez muito mal, mesmo nem sendo comigo, mas ela foi forte e corajosa o bastante para conseguir contar e se abrir para as pessoas que ama. </p>
+    <p>&emsp;Vocês devem estar se perguntando o que aconteceu com Beth... Aconteceu que, quando ela tinha 5 anos de idade, ela foi abusada por um conhecido da família. Ele era dono de uma loja de produtos de limpeza. O pior de tudo é que ele ainda continua lá. Na época, sua vó havia pedido para que comprasse alguns produtos na loja do homem e não era para ter o porquê de se preocuparem, pois o lugar era de uns 30 passos de distância e não precisava atravessar a rua. Além de que ele era conhecido da família e não era a primeira vez que ela ia comprar produtos de limpeza. Nesse dia que sua vó havia pedido para que a Beth comprasse alguns produtos, ela foi com um short claro e com a camiseta de turma da Mônica. Quando chegou lá, ela pediu para que ele separasse os produtos feito pela vó, nesse tempo, Beth estava observando as coisas que tinham na loja. Como aventais, sapatos, garrafas, várias cores diferentes de desinfetante... Até o homem chamá-la e pedisse que ela se sentasse em seu colo. Como uma criança que não via maldade e achava aquilo algo comum dentro de casa, inocentemente ela se sentou em seu colo, mas ela começou a estranhar quando o homem estava pressionando sua cintura para baixo com força, se esfregando nela. Ela percebeu que aquilo não acontecia dentro de casa. E saiu. Apenas saiu, em silêncio, sem entender direito o que tinha acontecido. </p>
+    <p>&emsp;Anos se passaram, quando Beth já havia completado 15 anos de idade, passou em frente da loja do homem e começou a reviver toda aquela cena novamente. Ela ficou completamente abalada e começou a se culpar por algo que ela não tinha noção do que estava acontecendo. Ela começou a ficar muito mal. Aquela cena voltava todas as noites, como se o pesadelo tivesse voltado para cobrar algo que nunca foi culpa dela. Ela não sabia o que fazer o foi procurar a minha ajuda e a de Verô. Nós ficamos do lado de Beth o tempo todo apoiando-a.  </p>
+    <p>&emsp;Pesquisei um pouco sobre o porquê Beth não lembrava que isso aconteceu com ela durante todo esse tempo. Simplesmente encontrei que nosso cérebro é muito esperto, mesmo sendo muito jovem. Ele bloqueia as memórias que são um trauma, para que a criança não possa sofrer e consiga aproveitar a infância, e quando a pessoa estiver madura o suficiente ao ponto de conseguir reviver a cena traumática, o cérebro desencadeia o acontecimento. Quando soube disso fiquei pensando o quão doloroso deve ser estar sofrendo uma dor que foi causada há 10 anos atrás.  </p>
+    <p>&emsp;Eu, Beth e Verô. Ligamos para a polícia tentando fazer um boletim de ocorrência para denunciar o pedófilo. Quem atendeu foi uma policial mulher e ela dizia que o boletim não poderia ser feito em ligação, pois era só para emergências e pediu para que fizéssemos online. Abrimos o site e simplesmente não deu para dar continuidade, porque somos de menores e não havia testemunhas. Como poderíamos denunciar algo que aconteceu 10 anos atrás sem ter provas? E nesse caso, a única prova que sobrou foram os sentimentos que a Elizabeth sentiu e que ninguém, nunca vai conseguir compreender o que ela sentiu ou o que está sentindo. Depois de tanto insistir e não conseguirmos dar continuidade na denúncia, a Beth simplesmente desistiu. A única coisa que se passava na cabeça dela, era se ela foi a única vítima ou se ele abusou de outras crianças. Ele é um monstro e não podia estar solto pelas ruas. Deveria pagar dobrado pelo que ele fez. </p>
+    <p>&emsp;Depois desse acontecimento, Beth começou a planejar um projeto que ajudassem pessoas que passaram por essa situação, mostrando que elas não estão sozinhas. Assim, ela abriu um grupo comunitário chamado “Meu corpo, minhas regras” Onde as pessoas poderiam denunciar e desabafar, seja ela de forma anônima ou não. Esse projeto fez com que muitas pessoas se sentissem acolhidas e fazia com que elas tivessem voz. Mas por falta de recurso, o projeto não conseguiu ir a diante, mas esse sonho segue na mente de Beth, que elas possam ajudar pessoas que ainda não foram ouvidas.  </p>
+    <blockquote>Beth sempre dizia que a dor não pode calar, e talvez por isso, mesmo quando o projeto parou, a voz dela nunca deixou de ecoar. </blockquote>
+
+    <hr class="divider">
+
+    <p>&emsp;A Beth já teve um amor e hoje ela não consegue pensar em outro. Isso porque a sua verdadeira paixão foi morar nas estrelas. Ele era o melhor amigo da Beth, e talvez quem sabe? um futuro namorado.</p>
+    <p>&emsp;Scott era o melhor amigo de Beth, eram inseparáveis. Muitas pessoas pensavam até que eles namoravam de tão próximos que eles eram. Eles tinham muitos anos de amizade e a confiança que eles tinham um pelo outro era surreal.</p>
+    <p>&emsp;Eles faziam várias coisas juntos, viviam um na casa do outro, já tiveram momentos que eles se beijaram sem perder a amizade. Beth confiou tanto nele que a sua primeira vez foi com ele. Sem pensar muito, os dois deitados assistindo filme e o clima foi esquentando e foi assim que foi a primeira vez da Beth. Primeiro que todos da escola e o melhor é que ninguém sabia, porque ela tem cara de anjinho e ninguém suspeitaria que ela fazia esse tipo de coisa.</p>
+    <p>&emsp;Muitos devem estar se perguntando como ele morreu e eu vou falar um pouco sobre.</p>
+    <p>&emsp;Ele era um menino incrível, um anjo que foi enviado por deus, a Beth sempre dizia que era o seu anjo da guarda, mas quem precisava de um era o próprio. Já que ele era um menino muito bom ele era o orgulho da família, ele tinha tudo que ele pedia, pois ele era esforçado na escola, era um ótimo filho e um ótimo amigo para todos, tudo que ele ganhava era por mérito próprio. Porém a inveja almejava sobre a vida de Scott, seu primo Otavio estava prestes a fazer uma loucura que ninguém imaginava.</p>
+    <p>&emsp;Ele invejava a vida de Scott, porque o Otavio não se sentia amado pelos pais e era a "desgraça" da família. Com raiva, decidiu acabar essa história de uma vez por todas e acabou esfaqueando o seu próprio primo por inveja. </p>
+    <p>&emsp;Já vai fazer um ano e cinco meses que ele foi para o céu e até hoje a Beth pensa nele, como poderia ter sido se ele ainda estivesse aqui. Toda vez que ela pensa no Scott, ela se sente vazia, como se faltasse algo nela. </p>
+
+    <hr class="divider">
+
+    <p>&emsp;Não tem muito o que falar sobre a Beth. Ela é uma menina misteriosa, um pouco lerda, mas ela é uma ótima amiga. Ela é inteligente e muito esforçada. Mas a história que estou prestes a contar não é uma história de amor, pode ter certeza. A única certeza é que essa história é uma loucura por um amor.</p>
+    <p>&emsp;Beth tinha acabado de me ligar um pouco antes das férias de julho e ela falou que tinha sonhado com uma vingança, porque a justiça ainda não foi feita. Eu sem entender nada do que ela estava falando perguntei para ela me explicar com detalhes, porque ela estava desesperada para fazer uma loucura. Ela queria minha ajuda e a ajuda da Verônica para matar o Otavio, pois a raiva que ainda existia nela só estava aumentando enquanto o tempo passava.</p>
+    <p>&emsp;Eu e a Verônica não concordamos em ajudar, pois era muito errado e se depender iria dar muito errado para nós. Iriamos ser presas e nunca realizaremos nossos sonhos, mas Beth estava determinada em executar o seu plano para matar o alvo. </p>
+
+    <hr class="divider">
+
+    <p>&emsp;No dia seguinte logo de manhã apareceu na TV que o Otavio foi morto por uma pessoa que tinha um porte pequeno e provavelmente seria uma mulher. Na hora veio em mente a Beth, mas eu não quis acreditar, porque ela não teria coragem de fazer isso sozinha ou até mesmo escondido de mim e da Verônica. </p>
+    <p>&emsp;Na mesma hora, liguei para as meninas perguntando se elas tinham visto o que passou na TV, mas a única que atendeu foi Verônica, achamos muito estranho isso ter acontecido. Eu e a Verô, ligamos para a mãe dela, mas não havia notícias do paradeiro de Beth, isso se tornou muito suspeito, então fomos investigar e descobrir o que aconteceu.</p>
+    <p>&emsp;Na TV, mostrava que o corpo de Otavio foi encontrado na pista de skate, porém não havia câmeras e nem testemunhas, ou seja, o trabalho é dobrado. Não sabemos se ele morreu ali mesmo ou se alguém transportou o corpo até lá. Os suspeitos para esse acontecimento são os inimigos, ele tem muitos, pois ele nunca se deu bem com as pessoas, mas a principal dessa lista é a Beth, por motivos de vingança e lembrando que ela estava planejando fazer isso ontem, e agora ela sumiu. </p>
+    <p>&emsp;Eu e a Verônica decidimos ir até a pista de skate, lá estava rodeado de policiais, peritos e detetives, ao redor tinha muitos repórteres de diferentes emissoras de TV, querendo saber o que aconteceu. Não sabiam ao certo o que aconteceu, porque o corpo estava totalmente intacto, como se fosse o crime perfeito, sem digitais, nem se quer um fio de cabelo, nenhum vestígio deixado para trás. Os oficiais estavam pensando em cogitar que foi uma morte natural, mas o garoto é saudável e muito novo para morrer dessa forma.</p>
+    <p>&emsp;Tentamos entrar de penetras na cena do crime para sabermos o que aconteceu, é claro que fomos barradas. Perguntamos aos oficiais se podíamos investigar junto com eles e eles disseram: </p>
+    <p>&emsp;— Isso é trabalho para os profissionais, voltem para a casa de vocês e deixem de ser curiosas. </p>
+    <p>&emsp;Nos sentimos envergonhadas, mas sabíamos que poderíamos ajudar com algo, então eu insisti. </p>
+    <p>&emsp;— Por favor, deixa a gente participar dessa investigação, iremos ser bastante úteis e prometemos que vamos ficar quietas, mal perceberão que estamos aqui — Eu bastante persistente finalizei — Por favorzinho!</p>
+    <p>&emsp;É claro que eles disseram um não bem seco, mais seco do que comer farofa crua, mas a Verô e eu não desistimos facilmente, quando o assunto é mistério, nós sentimos como se fossemos Sherlock Holmes. </p>
+    <p>&emsp;Então fomos procurar a principal suspeita que sabemos, Beth. Onde ela poderia estar? Vamos descobrir fazendo algumas perguntas à mãe dela. Quando chegamos na casa de Beth, por sorte ou por coincidência do destino, a mãe dela estava tomando banho e quem nos atendeu foi a própria desaparecida.</p>
+    <p>&emsp;Ela estava abalada, parecia que havia feito algo de errado, perguntamos a ela se sabia o que tinha acontecido e ela falou: </p>
+    <p>&emsp;— Como não saber? Aqui no condomínio só se fala disso!</p>
+    <p>&emsp;Era de se esperar, porque é como dizem: “notícia ruim corre rápido”. </p>
+    <p>&emsp;Tentamos manter a calma diante essa situação, mas eu e a Verô queríamos respostas do que aconteceu, onde ela estava? O que estava fazendo? Queríamos fazer várias perguntas, mas não poderíamos apontar diretamente para nossa amiga.</p>
+    <p>&emsp;— Vocês não acham que foi eu, né? — Perguntou Beth, desconfiada. </p>
+    <p>&emsp;— Não, mas é muito louco, porque você estava planejando fazer isso ontem — Disse Verô. </p>
+    <p>&emsp;— É eu sei, mas eu pensei mais de um milhão de vezes para não fazer merda e me segurar para não deixar que meus pensamentos fizessem me convencer que seria uma boa ideia — Beth falou apavorada. </p>
+    <p>&emsp;Decidimos procurar mais pistas, voltamos para a cena do crime, junto com Beth, pensamos em vários inimigos e fomos entrevistar cada um, mas por coincidência, todos tinham um álibi para comprovar onde estava quando o Otavio foi morto. A casa momento que passava, se tornava algo mais difícil de descobrir. Voltamos para a casa de Beth e quando chegamos lá, várias viaturas estavam ao redor e adivinha? A mãe de Beth estava sendo presa, mas por quê? Perguntamos aos oficiais e as pistas estavam levando a ela. </p>
+    <p>&emsp;— Que? Como assim? Que pistas? Mas como isso pode acontecer? — Disse Beth desesperada. </p>
+    <p>&emsp;— É simples minha cara, já estávamos desconfiados de sua família ou da família de Scott, por motivos de vingança, porém a família dele estão na praia desde semana passada, então sobrou vocês. Seu pai sempre trabalha e nunca está em casa e possivelmente ele nem tem ideia do que aconteceu com Scott, então era você ou sua mãe. Demoramos para chegar em uma conclusão, mas suas amigas foram na cena do crime e pareciam que não sabiam de nada, acharíamos estranho se elas não fossem até lá, pois suas melhores amigas, se você fosse a assassina, elas já saberiam. — Disse o detetive argumentando — Por fim, quando viemos investigar, sua mãe estava tomando banho e tinha cerca de 10 minutos que você havia saído. Depois de insistimos, ela abriu a porta com o roupão com um cheiro muito forte de produto de limpeza, mas sua casa não parecia estar limpa com esses produtos. Reparou isso? — Perguntou o detetive. </p>
+    <p>&emsp;— Sim, tinha muito muito tempo que ela estava no banho, mas não pensei que seria por isso, mas o que isso tudo tem a ver? Isso não faz o menor sentido. — Disse Beth, toda confusa. </p>
+    <p>&emsp;— Bom, o sentido é que o corpo estava sem pistas, pois foi limpo muito bem e os produtos eficazes para esse serviço são os que são muito fortes, então chegamos em uma conclusão assim que sua mãe abriu a porta, não falamos muito, pois sua mãe tinha se entregado, então facilitou o nosso trabalho. — Concluiu o detetive. </p>
+    <p>&emsp;— Que? Como assim? Não é possível! Eu tenho que falar com ela. Por favor, só te peço isso — Disse Beth. </p>
+    <p>&emsp;O detetive permitiu que ela poderia falar com sua mãe. Quando Beth a viu dentro da viatura começou a não ter reação, porque não sabia como isso pode acontecer e sua mãe falou:</p>
+    <p>&emsp;— Sim filha, foi eu. Você é o meu bem mais precioso e eu mato e morro por sua felicidade. Ele tirou o seu brilho, não aguentava mais ver você sofrer de dor da sua perda e eu quis te vingar, sei que é errado e espero que possa me perdoar caso te decepcionei. Eu ouvi você falando do seu plano para as suas amigas e eu executei. Me desculpa se te magoei, mas espero que fique bem! Já falei com seu pai, ele vai trabalhar em home office, ele vai voltar para a casa, para você não ter que se mudar para casa da sua vó e ficar longe das suas amigas. Eu te amo filha! Não desista de mim! </p>
+    <p>&emsp;A viatura começou a andar e a única reação de Beth foi chorar, estava emocionada? Ou triste? Com raiva? Só sabemos que no final de tudo ela falou: </p>
+    <p>&emsp;— Eu te amo mãe. Vai ficar tudo bem!</p>
+    <p>&emsp;Pelo menos sabemos o que sentia, e nessa história com certeza, isso não acaba aqui.</p>
+
+  </article>
+
+  <!-- Capítulo 4 -->
+  <article id="cap4" class="chapter reveal">
+    <h3>Capítulo 4 — Peter</h3>
+    <p>&emsp;Depois de contar um pouco das meninas, quero começar a falar sobre o Peter. Você já sabe de todo o romance de todo carinho que nós temos, mas é bom contar sobre as coisas que aconteceram com ele também. Pensei muito no que eu deveria escrever sobre ele e decidi começar do início. </p>
+    <p>&emsp;Pelas histórias que Peter me contava, a infância dele foi bem difícil, pois tinha que trabalhar desde criança para sustentar a família, vendia balas no farol e era ajudante de feirante. Fazia de tudo para conseguir ter o pão de cada dia em casa. </p>
+    <p>&emsp;E os pais? Pelo que sei, sua mãe trabalhava como diarista e seu pai tinha muito dinheiro, mas nunca ajudou seu filho em questões financeiras. Peter, me dizia que seu pai alugava casas e essa era uma das formas que ele conseguia de ter muito dinheiro. O pai dele era garanhão, conseguia ter muitas mulheres pela lábia, e na época, para ter muitas mulheres, precisava de ter muito dinheiro. </p>
+    <p>&emsp;Pelo fato de seu pai ser “rico”, não interferiu em absolutamente nada na qualidade de vida do Peter e de sua família. Porque ele tinha que correr atras para conseguir sobreviver sem a ajuda de seu pai. </p>
+
+    <hr class="divider">
+
+    <p>&emsp;Fora isso, tem a parte amorosa de Peter. Ele me contou sobre sua primeira namorada. Eles se conheceram em um baile black que acontecia na comunidade. Foi lá que ele viu Flora pela primeira vez. Uma garota de olhos azuis e sorriso doce. Peter não conseguiu se conter, foi como se o mundo inteiro tivesse parado por alguns segundos só para ele olhar para ela. </p>
+    <p>&emsp;O primeiro beijo aconteceu ao som de Always, do Bon Jovi. Desde então, os dois se tornaram inseparáveis. Viviam aquele tipo de amor intenso, puro e ao mesmo tempo confuso, típico de quem ainda está aprendendo o que é sentir tanto por alguém. </p>
+    <p>&emsp;Mas a vida tem um jeito estranho de mudar o rumo das coisas. Flora engravidou aos quatorze anos. Eles estavam com medo, mas também com esperança. Já tinham até escolhido o nome: seria um menino, e se chamaria Miguel. Só que o destino foi cruel. No terceiro mês de gravidez, Flora perdeu o bebê. </p>
+    <p>&emsp;O mundo deles desabou. Era como se o som de Always tivesse parado no meio da música, deixando apenas o silêncio e as lembranças do que poderia ter sido. A tristeza foi tomando conta devagar, e o amor que antes queimava com tanta força começou a se apagar sem que eles percebessem. Não houve brigas, nem adeus de novela. Apenas o silêncio, o afastamento, e o peso do que viveram cedo demais. No fim, seguiram caminhos diferentes. Mas aquele amor, e o nome Miguel, ficaram guardados num canto que o tempo nunca conseguiu apagar. </p>
+    <p>&emsp;Peter, havia me contato que se sentiu muito sozinho ao ponto de tentar descobrir novos hobbies para se distrair, até mesmo se arriscando nas escritas. Ele me mostrou um texto lindo que falava de um amor puro, que nunca havia visto: </p>
+
+    <blockquote>Você… 
+
+<p>&emsp;Falar sobre você é tão fácil e tão sincero, que às vezes encontro as palavras certas com naturalidade… e outras vezes percebo que não preciso dizer nada. Porque no meu olhar, tudo já está dito. Mesmo quando minha voz consegue esconder, meus olhos revelam a mais pura verdade. </p>
+
+<p>&emsp;Depois de te conhecer, comecei a reparar mais no pôr do sol. Passei a querer vê-lo e senti-lo todos os dias, porque é nele que me sinto mais próximo de você, mesmo quando está longe. O pôr do sol me lembra você. O calor me envolve, como o seu abraço, a intensidade me leva aos seus beijos, e o brilho do sol me faz enxergar o seu olhar vibrante. </p>
+
+<p>&emsp;Essa sensação me faz sentir tão vivo que só consigo fechar os olhos e sorrir, imaginando como seria se você estivesse exatamente aqui. É uma sensação inefável… uma vontade imensa de estar nos seus braços, porque é lá que encontro segurança, paz e o lar que reconheço em você. </p>
+
+<p>&emsp;E eu amo isso. </p>
+
+<p>&emsp;Eu amo você. </p></blockquote>
+
+    <hr class="divider">
+
+    <p>&emsp;Peter, foi visitar seu pai uma semana antes do meu aniversário, porque ele havia dito que seus pais haviam se divorciado. Ele ficou uma semana lá, não sei o que aconteceu, mas sei que essa vez foi a última vez que ele foi visitá-lo para nunca mais voltar. </p>
+    <p>&emsp;Depois de um tempo, Peter sempre se esforçou para dar tudo de bom e do melhor para sua mãe e seus irmãos, mesmo com as dificuldades, Peter consegue conquistar tudo aquilo que ele quer. Ele diz que futuramente vai abrir uma empresa e que vai ser reconhecido pelo mundo inteiro.  </p>
+    <p>&emsp;Um certo dia, na escola, o celular de Peter tocou e eu só consegui observar ele ficando pálido com os olhos arregalados, com as pernas tremendo e com vontade de chorar. Eu nunca tinha visto ele daquele jeito. Sabia que tinha acontecido alguma coisa. </p>
+    <p>&emsp;— Peter, está tudo bem? Aconteceu alguma coisa? - Pergunto preocupada.</p>
+    <p>&emsp;Ele me olha com as lágrimas caindo e diz: </p>
+    <p>&emsp;— Vai Ficar, Ju. </p>
+    <p>&emsp;Eu sem entender, pergunto novamente o que havia acontecido e ele me deu a notícia que seu pai havia falecido. Ele começava a chorar soluçando como uma criança. Sem saber o que fazer, eu o abracei, pois tinha certeza de que iria confortar o coração dele. </p>
+    <p>&emsp;Depois de se acalmar, Peter começou a contar como a notícia havia chegado até ele. Disse que seu primo (filho do tio por parte de pai) vinha tentando encontrá-lo há algum tempo. O pai de Peter havia ficado muito mal depois que ele o visitou. Quando estava acamado, fez um último pedido ao irmão: que, caso viesse a falecer, ele desse o recado de sua morte e informasse que deixaria como herança uma casa na praia. </p>
+    <p>&emsp;Naquele tempo, o tio de Peter já travava uma dura luta contra o câncer. Mesmo enfrentando as próprias dificuldades, tentou cumprir o último desejo do irmão falecido, mas acabou não tendo tempo… partiu antes de conseguir. Então, a missão passou para o primo de Peter. Ele não descansou até encontrá-lo. Conseguiu algumas informações nas cidades vizinhas e, depois de muita busca, finalmente obteve o número de telefone de Peter. Assim pôde dar o recado e sentir que havia cumprido o dever que o pai tinha deixado para ser realizado nesta vida. </p>
+    <p>&emsp;Fiquei aterrorizada. Aquilo parecia cena de um filme. Mas, ao mesmo tempo, não conseguia parar de pensar no que realmente aconteceu quando Peter foi visitar o pai. Será que brigaram? Será que ele passou mal logo depois da visita, ou talvez enquanto Peter ainda estava lá? São tantas perguntas que me passam pela cabeça..., mas, por agora, preciso estar ao lado do meu amigo. Sei o quanto ele está abalado. Talvez, em outro momento, quando ele estiver mais preparado, eu volte a perguntar sobre isso. </p>
+    <p>&emsp;Nos dias que se seguiram, pude perceber que Peter parecia viver em outro mundo. Falava pouco, evitava contato com as pessoas e, quando sorria, dava para perceber que era só por costume. Eu tentava estar por perto, mesmo quando ele não dizia nada. Às vezes o silêncio fala mais do que mil palavras, e naquele momento, eu só queria que ele sentisse que não estava sozinho. </p>
+    <p>&emsp;A forma que ele estava agindo, estava me deixando abalada, porque eu me importo e não sabia o que fazer. Pensei em dar um tempo para que ele processasse tudo que aconteceu, mas me preocupa dele querer se afastar de tudo e de todos. Diante isso, pude sentar-me um pouco para respirar e pensar em algo para escrever, porque escrever me faz sentir bem. Talvez se eu mostrasse um pouco do que nós estamos sentindo, acho que poderia nos ajudar.</p>
+    <p>&emsp;Peguei um Caderno e um lápis e comecei a escrever sem parar, como se meus próprios punhos tivessem vida e estariam escrevendo um desabafo do que estavam sentindo. E o texto ficou assim: </p>
+
+    <blockquote>Eu... 
+
+<p>&emsp;Só estou tentando compreender esse sentimento. O que, afinal, eu deveria sentir?</p> 
+
+<p>&emsp;Eu tento me expressar para alguém, mas é como se estivesse falando para o vazio. </p>
+
+<p>&emsp;Geralmente, as palavras que escrevo nascem profundas, carregadas de intensidade. Mas agora… agora é diferente. Não consigo traduzir isso em letras. </p>
+
+<p>&emsp;Já apaguei e reescrevi ideias tantas vezes, tentando encontrar algo digno não apenas de um livro qualquer, mas de o livro. Aquele que representaria não só a mim, mas a inúmeras pessoas espalhadas pelo mundo. Talvez devesse existir um manual chamado “Como compreender os sentimentos”. </p>
+
+<p>&emsp;Porque é tão difícil e, ao mesmo tempo, tão simples? Por que isso me deixa tão pensativa? Por que me faz ter vontade de parar tudo… </p>
+
+<p>&emsp;Sentar-me no chão, com os braços apoiados nas pernas dobradas e simplesmente chorar. </p>
+
+<p>&emsp;Chorar até me cansar. </p>
+
+<p>&emsp;Chorar até adormecer. </p>
+
+<p>&emsp;E fingir que nada disso aconteceu. </p>
+
+<p>&emsp;Talvez seja apenas uma crise existencial. Mas, se for… por que a gente sente isso? Por que pensamos tanto na nossa própria existência? Por que precisamos, o tempo todo, ser úteis? </p>
+
+<p>&emsp;Não quero desistir da vida. </p>
+
+<p>&emsp;Quero apenas um descanso. </p>
+
+<p>&emsp;Um tempo para respirar. </p>
+
+<p>&emsp;Porque, de alguma forma, sinto que tenho tempo para tudo e, ao mesmo tempo, para nada. </p>
+
+<p>&emsp;Será que as coisas são realmente relativas… </p>
+
+<p>&emsp;Ou será que eu é que não sei aproveitar a vida?</p> </blockquote>
+    
+    <hr class="divider">
+
+    <p>&emsp;Os dias foram passando, e aos poucos, Peter começou a se reencontrar. Não foi de uma hora para outra, o luto não vai embora com o tempo, ele apenas aprende a se acomodar dentro da gente. Mas Peter, diferente de antes, decidiu não deixar que a dor o definisse. </p>
+    <p>&emsp;Ele começou a escrever com mais frequência, transformando o que sentia em palavras, como se cada texto fosse um pedaço do que restava do seu coração tentando se reconstruir. Descobriu que a escrita era o refúgio que o pai nunca lhe deu e o abraço que o tempo não pôde levar. </p>
+    <p>&emsp;Um dia, ele me disse: </p>
+    <p>&emsp; Sabe, Ju… eu aprendi que a vida não espera a gente sarar para continuar. Ela só continua. E a gente precisa escolher se vai caminhar junto ou ficar parado olhando o tempo passar. </p>
+    <p>&emsp;Essas palavras ficaram comigo. </p>
+    <p>&emsp;Peter continuou caminhando. Voltou a sonhar com aquela empresa que queria abrir, estava estudando, trabalhando, com isso, pode ajudar a sua mãe e os irmãos e, de alguma forma, parecia mais maduro, mais sereno. Às vezes ainda olhava para o horizonte com aquele olhar distante, mas agora havia algo diferente ali: uma faísca de esperança. </p>
+    <p>&emsp;O menino que vendia balas no farol cresceu, enfrentou perdas que poderiam tê-lo destruído, mas escolheu continuar. E, no fundo, acho que é isso o que mais admiro nele. A coragem de recomeçar mesmo quando tudo parecia desabar. </p>
+    <p>&emsp;Talvez o destino tenha tirado muito de Peter, mas também o ensinou algo que poucos aprendem tão cedo: que o amor e a dor podem coexistir, e que das feridas mais profundas nascem as histórias mais bonitas. </p>
+
+    </article>
+
+</section>
+
+        <!-- feedback -->
+    <section id="sinopse" class="card reveal">
+        <blockquote>
+      <h2>Se você chegou até aqui</h2>
+      <p class="lead">obrigada por ler meu livro! Me acompanhe para saber das atualizações e continuações da história!</p>
+      <p class="lead">BJS DA DUDA ❤️</p>
+      <p class="lead">Se tiver alguma dúvida ou um feedback para enviar, entre em contato comigo pelo meu instagram: @rlxduda</p>
+      </blockquote>
+    </section>
+
+
+    <footer class="site-footer reveal">
+      <div>Escrito por Maria Eduarda Rodrigues Marcelino — © <span id="year"></span></div>
+    </footer>
+
+  </div>
+
+  <a class="top-btn" href="#top" aria-label="Voltar ao topo">Topo</a>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Reveal on scroll
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting) e.target.classList.add('visible');
+      });
+    },{threshold:0.12});
+
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+    // Active toc link
+    const sections = document.querySelectorAll('article.chapter, section#sumario, section#sinopse, section#agradecimentos');
+    const links = document.querySelectorAll('nav.toc a, #sumario a');
+
+    const setActive = ()=>{
+      let index = sections.length-1;
+      for(let i=0;i<sections.length;i++){
+        const rect = sections[i].getBoundingClientRect();
+        if(rect.top > 80) { index = i-1; break; }
+      }
+      links.forEach(l=>l.classList.remove('active'));
+      // try to find matching link
+      const id = (index>=0 && sections[index]) ? sections[index].id : 'cap1';
+      const activeLink = Array.from(links).find(a => a.getAttribute('href') === '#'+id);
+      if(activeLink) activeLink.classList.add('active');
+    };
+
+    window.addEventListener('scroll', setActive);
+    window.addEventListener('load', setActive);
+
+    // Helper: quick-add chapter (for author editing convenience)
+    // To add a chapter: duplicate an <article id="capX" class="chapter"> block and update id and TOC link in the Sumário.
+  </script>
+</body>
+</html>
